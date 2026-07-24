@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using T2507E_ASP.Data;
 using T2507E_ASP.DTOs.Student;
+using T2507E_ASP.Entities;
 using T2507E_ASP.Services;
 
 namespace T2507E_ASP.Controllers;
@@ -8,27 +11,22 @@ namespace T2507E_ASP.Controllers;
 [Route("api/[controller]")]
 public class StudentController : Controller
 {   private readonly IPaymentService _paymentService;
-    public StudentController([FromKeyedServices("momo")]IPaymentService paymentService)
+    private readonly T2507EASPDbContext _dbContext;
+    public StudentController([FromKeyedServices("momo")]IPaymentService paymentService,
+        T2507EASPDbContext dbContext)
     {
         _paymentService = paymentService;
+        _dbContext = dbContext;
     }
     
     [HttpGet]
-    public IActionResult GetAll()
+    public ActionResult<List<Student>> GetAll()
     {
-        return Ok(new[]
-        {
-            new
-            {
-                Id = 1,
-                Name="Hoa"
-            },
-            new
-            {
-                Id = 2,
-                Name="Huang"
-            }
-        });
+        var students = _dbContext.Students
+            .AsNoTracking()
+            .OrderBy(x => x.Id)
+            .ToList();
+        return Ok(students);
     }
 
     [HttpGet("{id}")] // Route Parameter

@@ -1,21 +1,32 @@
-version: '3'
+version: '3.8'
 
 volumes:
-  mssql-db:
+  mssql-data:
 
 services:
   mssql:
     image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssql
     platform: linux/amd64
     ports:
       - "1433:1433"
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=Sa@1234
+      - SA_PASSWORD=YourStrong@Password123
       - MSSQL_PID=Developer
       - MSSQL_COLLATION=SQL_Latin1_General_CP1_CI_AS
       - TZ=Asia/Ho_Chi_Minh
     volumes:
-      - mssql-db:/var/opt/mssql
-    container_name: mssql
+      - mssql-data:/var/opt/mssql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    # Chạy SQL Server background, đợi 10s cho server lên hẳn rồi thực thi script tạo DB
+    entrypoint: >
+      /bin/bash -c "
+      /opt/mssql/bin/sqlservr &
+      echo 'Đang chờ SQL Server khởi động...';
+      sleep 12;
+      /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'YourStrong@Password123' -C -i /docker-entrypoint-initdb.d/init.sql;
+      echo 'Tạo Database thành công!';
+      wait
+      "
     restart: always
