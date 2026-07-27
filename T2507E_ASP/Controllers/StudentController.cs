@@ -30,13 +30,12 @@ public class StudentController : Controller
     }
 
     [HttpGet("{id}")] // Route Parameter
-    public IActionResult GetById(int id)
+    public ActionResult<Student> GetById(int id)
     {
-        return Ok(new
-        {
-            Id = id,
-            Name = "Hoa"
-        });
+        var student = _dbContext.Students
+            .AsNoTracking()
+            .FirstOrDefault(x => x.Id == id);
+        return Ok(student);
     }
 
     [HttpGet("search")] // Query String /api/student?page=1&pageSize=20

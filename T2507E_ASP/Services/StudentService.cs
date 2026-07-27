@@ -1,6 +1,0 @@
-namespace T2507E_ASP.Services;
-
-public class StudentService
-{
-    
-}

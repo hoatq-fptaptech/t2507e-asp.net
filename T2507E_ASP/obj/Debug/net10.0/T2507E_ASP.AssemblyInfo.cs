@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("T2507E_ASP")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4208214c7264b5bea728398e90c283fdd5f68d19")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5b11589f19bc13c94bec4accce648cdf9b165200")]
 [assembly: System.Reflection.AssemblyProductAttribute("T2507E_ASP")]
 [assembly: System.Reflection.AssemblyTitleAttribute("T2507E_ASP")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
