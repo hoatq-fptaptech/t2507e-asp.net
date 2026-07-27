@@ -19,24 +19,58 @@ public class StudentService : IStudentService
             students.Select(MapToResponse).ToList());
     }
 
-    public Task<ApiResult<StudentResponse>> GetByIdAsync(int id)
+    public async Task<ApiResult<StudentResponse>> GetByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        var student =  await _studentRepository.GetByIdAsync(id);
+        return student is null ? 
+                ApiResult<StudentResponse>.Failure("NOT FOUND")
+            : ApiResult<StudentResponse>.Success(MapToResponse(student));
     }
 
-    public Task<ApiResult<StudentResponse>> CreateAsync(CreateStudentRequest request)
+    public async Task<ApiResult<StudentResponse>> CreateAsync(CreateStudentRequest request)
     {
-        throw new NotImplementedException();
+        var code = request.Code.Trim().ToUpperInvariant();
+        var codeExists = await _studentRepository.ExistsByCodeAsync(code);
+        if (codeExists)
+        {
+            return ApiResult<StudentResponse>.Failure("CODE_EXISTS");
+        }
+
+        var student = new Student
+        {
+            StudentCode = code,
+            Name = request.Name,
+            Email = request.Email,
+            Age = request.Age
+        };
+        await _studentRepository.AddAsync(student);
+        await _studentRepository.SaveChangesAsync();
+        return ApiResult<StudentResponse>.Success(MapToResponse(student));
     }
 
-    public Task<ApiResult<StudentResponse>> UpdateAsync(int id, UpdateStudentRequest request)
+    public async Task<ApiResult<StudentResponse>> UpdateAsync(int id, UpdateStudentRequest request)
     {
-        throw new NotImplementedException();
+        var student = await _studentRepository.GetByIdAsync(id);
+        if (student is null)
+        {
+            return ApiResult<StudentResponse>.Failure("NOT FOUND");
+        }
+        student.Name = request.Name;
+        student.Age = request.Age;
+        await _studentRepository.SaveChangesAsync();
+        return ApiResult<StudentResponse>.Success(MapToResponse(student));
     }
 
-    public Task<ApiResult<StudentResponse>> DeleteAsync(int id)
+    public async Task<ApiResult<StudentResponse>> DeleteAsync(int id)
     {
-        throw new NotImplementedException();
+        var student = await _studentRepository.GetByIdAsync(id);
+        if (student is null)
+        {
+            return ApiResult<StudentResponse>.Failure("NOT FOUND");
+        }
+        _studentRepository.Remove(student);
+        await _studentRepository.SaveChangesAsync();
+        return ApiResult<StudentResponse>.Success(MapToResponse(student));
     }
 
     public static StudentResponse MapToResponse(Student student)

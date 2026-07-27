@@ -8,8 +8,11 @@ public class CreateStudentRequest
     [MinLength(3)]
     public string Name { get; set; } // abstract property
     [Range(18, 50)]
-    public int Age { get; set; }
+    public uint Age { get; set; }
     [Required]
     [RegularExpression("^[a-zA-Z]+$")]
     public string Code { get; set; }
+    [Required]
+    [RegularExpression("^[a-zA-Z]+$")]
+    public string Email { get; set; }
 }
