@@ -12,11 +12,22 @@ public class StudentService : IStudentService
     {
         _studentRepository = studentRepository;
     }
-    public async Task<ApiResult<List<StudentResponse>>> GetAllAsync()
+
+    public async Task<ApiResult<PagedResult<StudentResponse>>> GetAllAsync(StudentQueryParameters parameters)
     {
-        var students = await _studentRepository.GetAllAsync();
-        return ApiResult<List<StudentResponse>>.Success(
-            students.Select(MapToResponse).ToList());
+        var (items, totalItems) = await _studentRepository
+                            .GetAllAsync(parameters);
+        var totalPages = totalItems == 0 ? 0 : 
+            (int)Math.Ceiling((double)totalItems / parameters.PageSize);
+        var pagedResult = new PagedResult<StudentResponse>
+        {
+            Items = items.Select(MapToResponse).ToList(),
+            TotalPages = totalPages,
+            PageNumber = parameters.Page,
+            PageSize = parameters.PageSize,
+            TotalItems = totalItems
+        };
+        return ApiResult<PagedResult<StudentResponse>>.Success(pagedResult);
     }
 
     public async Task<ApiResult<StudentResponse>> GetByIdAsync(int id)

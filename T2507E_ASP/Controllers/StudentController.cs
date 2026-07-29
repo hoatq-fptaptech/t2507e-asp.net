@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using T2507E_ASP.Data;
 using T2507E_ASP.DTOs.Student;
 using T2507E_ASP.Entities;
+using T2507E_ASP.Models;
 using T2507E_ASP.Services;
 
 namespace T2507E_ASP.Controllers;
@@ -12,21 +13,27 @@ namespace T2507E_ASP.Controllers;
 public class StudentController : Controller
 {   private readonly IPaymentService _paymentService;
     private readonly T2507EASPDbContext _dbContext;
+    private readonly IStudentService _studentService;
     public StudentController([FromKeyedServices("momo")]IPaymentService paymentService,
         T2507EASPDbContext dbContext)
     {
         _paymentService = paymentService;
         _dbContext = dbContext;
     }
-    
+
     [HttpGet]
-    public ActionResult<List<Student>> GetAll()
+    public async Task<ActionResult<ApiResult<PagedResult<StudentResponse>>>> 
+        GetAll([FromQuery] StudentQueryParameters parameters)
     {
-        var students = _dbContext.Students
-            .AsNoTracking()
-            .OrderBy(x => x.Id)
-            .ToList();
-        return Ok(students);
+        var allowedSortFields = new[] {  "name", "code" };
+        var allowedSortDirections = new[] {"desc", "asc"};
+        if (!allowedSortFields.Contains(parameters.SortBy)
+            || !allowedSortDirections.Contains(parameters.SortDirection))
+        {
+            return BadRequest(ApiResult<string>.Failure("BAD_SORT_DIRECTION"));
+        }
+        var result = await _studentService.GetAllAsync(parameters);
+        return Ok(result);
     }
 
     [HttpGet("{id}")] // Route Parameter

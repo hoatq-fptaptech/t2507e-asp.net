@@ -5,7 +5,8 @@ namespace T2507E_ASP.Services;
 
 public interface IStudentService
 {
-    Task<ApiResult<List<StudentResponse>>> GetAllAsync();
+    Task<ApiResult<PagedResult<StudentResponse>>> GetAllAsync(
+        StudentQueryParameters parameters);
     Task<ApiResult<StudentResponse>> GetByIdAsync(int id);
     Task<ApiResult<StudentResponse>> CreateAsync(CreateStudentRequest request);
     Task<ApiResult<StudentResponse>> UpdateAsync(int id, UpdateStudentRequest request);
