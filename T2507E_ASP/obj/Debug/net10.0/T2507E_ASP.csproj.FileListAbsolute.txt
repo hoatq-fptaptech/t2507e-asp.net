@@ -157,3 +157,6 @@
 /Users/quanghoatrinh/Documents/Aptech/SEM3/T2507E/ASP.NET/T2507E/T2507E_ASP/bin/Debug/net10.0/runtimes/win-x64/native/Microsoft.Data.SqlClient.SNI.dll
 /Users/quanghoatrinh/Documents/Aptech/SEM3/T2507E/ASP.NET/T2507E/T2507E_ASP/bin/Debug/net10.0/runtimes/win-x86/native/Microsoft.Data.SqlClient.SNI.dll
 /Users/quanghoatrinh/Documents/Aptech/SEM3/T2507E/ASP.NET/T2507E/T2507E_ASP/obj/Debug/net10.0/T2507E_ASP.sourcelink.json
+/Users/quanghoatrinh/Documents/Aptech/SEM3/T2507E/ASP.NET/T2507E/T2507E_ASP/bin/Debug/net10.0/Swashbuckle.AspNetCore.Swagger.dll
+/Users/quanghoatrinh/Documents/Aptech/SEM3/T2507E/ASP.NET/T2507E/T2507E_ASP/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/Users/quanghoatrinh/Documents/Aptech/SEM3/T2507E/ASP.NET/T2507E/T2507E_ASP/bin/Debug/net10.0/Swashbuckle.AspNetCore.SwaggerUI.dll

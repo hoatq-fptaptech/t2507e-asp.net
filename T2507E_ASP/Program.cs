@@ -27,8 +27,17 @@ builder.Services.AddScoped<IStudentRepository,StudentRepository>();
 // Add scoped Service
 builder.Services.AddScoped<IStudentService, StudentService>();
 
-var app = builder.Build();
+// Add Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
+var app = builder.Build();
+// add Swagger UI
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 // Configure the HTTP request pipeline.
 app.UseRouting();
 app.MapControllers();
