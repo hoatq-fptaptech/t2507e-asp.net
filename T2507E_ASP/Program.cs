@@ -23,9 +23,11 @@ builder.Services.AddDbContext<T2507EASPDbContext>(options =>
 
 // Add scoped Repository
 builder.Services.AddScoped<IStudentRepository,StudentRepository>();
-
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 // Add scoped Service
 builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 // Add Swagger
 builder.Services.AddEndpointsApiExplorer();

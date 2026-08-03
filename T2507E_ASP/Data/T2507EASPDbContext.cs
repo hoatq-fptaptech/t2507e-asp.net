@@ -11,4 +11,6 @@ public class T2507EASPDbContext: DbContext
 
     // public DbSet<Student> Students { get; set; } = null!;
     public DbSet<Student> Students => Set<Student>();
+    public DbSet<User> Users => Set<User>();
+    
 }

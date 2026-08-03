@@ -8,9 +8,11 @@ namespace T2507E_ASP.Services.Impl;
 public class StudentService : IStudentService
 {
     private readonly IStudentRepository _studentRepository;
-    public StudentService(IStudentRepository studentRepository)
+    private readonly ILogger<StudentService> _logger;
+    public StudentService(IStudentRepository studentRepository, ILogger<StudentService> logger)
     {
         _studentRepository = studentRepository;
+        _logger = logger;
     }
 
     public async Task<ApiResult<PagedResult<StudentResponse>>> GetAllAsync(StudentQueryParameters parameters)
@@ -40,10 +42,12 @@ public class StudentService : IStudentService
 
     public async Task<ApiResult<StudentResponse>> CreateAsync(CreateStudentRequest request)
     {
+        _logger.LogInformation("Create student with code: {StudentCode}",request.Code);
         var code = request.Code.Trim().ToUpperInvariant();
         var codeExists = await _studentRepository.ExistsByCodeAsync(code);
         if (codeExists)
         {
+            _logger.LogWarning("Code already exists: {StudentCode}",request.Code);
             return ApiResult<StudentResponse>.Failure("CODE_EXISTS");
         }
 
@@ -56,6 +60,7 @@ public class StudentService : IStudentService
         };
         await _studentRepository.AddAsync(student);
         await _studentRepository.SaveChangesAsync();
+        _logger.LogInformation("Create student with code: {StudentCode} and id: {Id}",request.Code,student.Id);
         return ApiResult<StudentResponse>.Success(MapToResponse(student));
     }
 
