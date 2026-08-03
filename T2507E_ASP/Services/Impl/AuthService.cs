@@ -56,8 +56,36 @@ public class AuthService : IAuthService
         return ApiResult<AuthResponse>.Success(authResponse);
     }
 
-    public Task<ApiResult<AuthResponse>> LoginAsyng(LoginRequest request)
+    public async Task<ApiResult<AuthResponse>> LoginAsync(LoginRequest request)
     {
-        throw new NotImplementedException();
+        var user = await _userRepository.FindByEmailAsync(
+            request.Email.Trim().ToLowerInvariant());
+        if (user is null)
+        {
+            return ApiResult<AuthResponse>.Failure("EMAIL_OR_PASSWORD_INVALID");
+        }
+
+        if (!user.IsActive)
+        {
+            return ApiResult<AuthResponse>.Failure("EMAIL_NOT_ACTIVE");
+        }
+
+        var passwordVerify = _passwordHasher.VerifyHashedPassword(
+                    user, user.Password, request.Password);
+        if (passwordVerify == PasswordVerificationResult.Failed)
+        {
+            return ApiResult<AuthResponse>.Failure("EMAIL_OR_PASSWORD_INVALID");
+        }
+        var (token,expiresAt) = _tokenService.CreateToken(user);
+        var authResponse = new AuthResponse
+        {
+            Id =  user.Id,
+            Email = user.Email,
+            Role = user.Role,
+            FullName = user.FullName,
+            AccessToken = token,
+            ExpiresAt = expiresAt
+        };
+        return ApiResult<AuthResponse>.Success(authResponse);
     }
 }

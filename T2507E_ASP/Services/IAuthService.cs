@@ -6,5 +6,5 @@ namespace T2507E_ASP.Services;
 public interface IAuthService
 {
     Task<ApiResult<AuthResponse>> RegisterAsync(RegisterRequest request);
-    Task<ApiResult<AuthResponse>> LoginAsyng(LoginRequest request);
+    Task<ApiResult<AuthResponse>> LoginAsync(LoginRequest request);
 }
