@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using T2507E_ASP.Data;
+using T2507E_ASP.Entities;
 using T2507E_ASP.Repositories;
 using T2507E_ASP.Repositories.Impl;
 using T2507E_ASP.Services;
@@ -28,7 +30,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-
+// Add Scoped AUTH
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 // Add Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
