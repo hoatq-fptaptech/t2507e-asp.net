@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using T2507E_ASP.Data;
@@ -10,6 +11,7 @@ namespace T2507E_ASP.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize] // chỉ cần có token hợp lệ là đc
 public class StudentController : Controller
 {   private readonly IPaymentService _paymentService;
     private readonly T2507EASPDbContext _dbContext;
@@ -22,6 +24,7 @@ public class StudentController : Controller
     }
 
     [HttpGet]
+    [Authorize(Roles = "User")]
     public async Task<ActionResult<ApiResult<PagedResult<StudentResponse>>>> 
         GetAll([FromQuery] StudentQueryParameters parameters)
     {
@@ -37,6 +40,7 @@ public class StudentController : Controller
     }
 
     [HttpGet("{id}")] // Route Parameter
+    [Authorize(Roles = "User,Admin")]
     public ActionResult<Student> GetById(int id)
     {
         var student = _dbContext.Students
@@ -44,7 +48,8 @@ public class StudentController : Controller
             .FirstOrDefault(x => x.Id == id);
         return Ok(student);
     }
-
+    
+    [AllowAnonymous]
     [HttpGet("search")] // Query String /api/student?page=1&pageSize=20
     public IActionResult Search(int page, int pageSize)
     {
@@ -52,6 +57,7 @@ public class StudentController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public IActionResult Create(CreateStudentRequest request)
     {
         return Ok(request);
