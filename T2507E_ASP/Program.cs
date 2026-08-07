@@ -1,3 +1,4 @@
+using System.IO.IsolatedStorage;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +10,8 @@ using T2507E_ASP.Repositories;
 using T2507E_ASP.Repositories.Impl;
 using T2507E_ASP.Services;
 using T2507E_ASP.Services.Impl;
+using T2507E_ASP.Storages;
+using T2507E_ASP.Storages.Impl;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +57,13 @@ builder.Services.AddAuthorization();
 // Add Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+// Add Provider
+var storageProvider = builder.Configuration["FileStorage:Provider"];
+switch (storageProvider)
+{
+    case "MinIO": builder.Services.AddScoped<IFileStorageProvider, MinioStorageProvider>();break;
+    default: builder.Services.AddScoped<IFileStorageProvider, LocalStorageProvider>();break;
+}
 
 var app = builder.Build();
 // add Swagger UI
