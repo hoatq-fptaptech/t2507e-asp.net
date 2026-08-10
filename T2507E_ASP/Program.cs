@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using T2507E_ASP.Data;
 using T2507E_ASP.Entities;
+using T2507E_ASP.Mappings;
 using T2507E_ASP.Repositories;
 using T2507E_ASP.Repositories.Impl;
 using T2507E_ASP.Services;
@@ -64,6 +65,8 @@ switch (storageProvider)
     case "MinIO": builder.Services.AddScoped<IFileStorageProvider, MinioStorageProvider>();break;
     default: builder.Services.AddScoped<IFileStorageProvider, LocalStorageProvider>();break;
 }
+// Add Mapper
+builder.Services.AddAutoMapper(typeof(StudentProfile));
 
 var app = builder.Build();
 // add Swagger UI

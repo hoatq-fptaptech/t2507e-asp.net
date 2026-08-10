@@ -1,3 +1,4 @@
+using AutoMapper;
 using T2507E_ASP.DTOs.Student;
 using T2507E_ASP.Entities;
 using T2507E_ASP.Models;
@@ -9,10 +10,14 @@ public class StudentService : IStudentService
 {
     private readonly IStudentRepository _studentRepository;
     private readonly ILogger<StudentService> _logger;
-    public StudentService(IStudentRepository studentRepository, ILogger<StudentService> logger)
+    private readonly IMapper _mapper;
+    public StudentService(IStudentRepository studentRepository,
+        ILogger<StudentService> logger, 
+        IMapper mapper)
     {
         _studentRepository = studentRepository;
         _logger = logger;
+        _mapper = mapper;
     }
 
     public async Task<ApiResult<PagedResult<StudentResponse>>> GetAllAsync(StudentQueryParameters parameters)
@@ -23,7 +28,8 @@ public class StudentService : IStudentService
             (int)Math.Ceiling((double)totalItems / parameters.PageSize);
         var pagedResult = new PagedResult<StudentResponse>
         {
-            Items = items.Select(MapToResponse).ToList(),
+            // Items = items.Select(s=>_mapper.Map<StudentResponse>(s)).ToList(),
+            Items = _mapper.Map<List<StudentResponse>>(items),
             TotalPages = totalPages,
             PageNumber = parameters.Page,
             PageSize = parameters.PageSize,
@@ -37,7 +43,7 @@ public class StudentService : IStudentService
         var student =  await _studentRepository.GetByIdAsync(id);
         return student is null ? 
                 ApiResult<StudentResponse>.Failure("NOT FOUND")
-            : ApiResult<StudentResponse>.Success(MapToResponse(student));
+            : ApiResult<StudentResponse>.Success(_mapper.Map<StudentResponse>(student));
     }
 
     public async Task<ApiResult<StudentResponse>> CreateAsync(CreateStudentRequest request)
@@ -51,13 +57,14 @@ public class StudentService : IStudentService
             return ApiResult<StudentResponse>.Failure("CODE_EXISTS");
         }
 
-        var student = new Student
-        {
-            StudentCode = code,
-            Name = request.Name,
-            Email = request.Email,
-            Age = request.Age
-        };
+        // var student = new Student
+        // {
+        //     StudentCode = code,
+        //     Name = request.Name,
+        //     Email = request.Email,
+        //     Age = request.Age
+        // };
+        var student = _mapper.Map<Student>(request);
         await _studentRepository.AddAsync(student);
         await _studentRepository.SaveChangesAsync();
         _logger.LogInformation("Create student with code: {StudentCode} and id: {Id}",request.Code,student.Id);
@@ -95,7 +102,7 @@ public class StudentService : IStudentService
         {
             Id = student.Id,
             StudentCode = student.StudentCode,
-            Name = student.Name,
+            FullName = student.Name,
             Email = student.Email,
             Age = student.Age,
         };
