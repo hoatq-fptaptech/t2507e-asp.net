@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using T2507E_ASP.Data;
 using T2507E_ASP.Entities;
 using T2507E_ASP.Mappings;
+using T2507E_ASP.Messaging;
 using T2507E_ASP.Repositories;
 using T2507E_ASP.Repositories.Impl;
 using T2507E_ASP.Services;
@@ -67,7 +68,8 @@ switch (storageProvider)
 }
 // Add Mapper
 builder.Services.AddAutoMapper(typeof(StudentProfile));
-
+// Add RabbitMQ Publisher
+builder.Services.AddScoped<RabbitMqPublisher>();
 var app = builder.Build();
 // add Swagger UI
 if (app.Environment.IsDevelopment())

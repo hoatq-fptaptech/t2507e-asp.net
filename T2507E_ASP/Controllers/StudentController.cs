@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using T2507E_ASP.Data;
 using T2507E_ASP.DTOs.Student;
 using T2507E_ASP.Entities;
+using T2507E_ASP.Messaging;
 using T2507E_ASP.Models;
 using T2507E_ASP.Services;
 
@@ -16,11 +17,13 @@ public class StudentController : Controller
 {   private readonly IPaymentService _paymentService;
     private readonly T2507EASPDbContext _dbContext;
     private readonly IStudentService _studentService;
+    private readonly RabbitMqPublisher _rabbitMqPublisher;
     public StudentController([FromKeyedServices("momo")]IPaymentService paymentService,
-        T2507EASPDbContext dbContext)
+        T2507EASPDbContext dbContext, RabbitMqPublisher rabbitMqPublisher)
     {
         _paymentService = paymentService;
         _dbContext = dbContext;
+        _rabbitMqPublisher = rabbitMqPublisher;
     }
 
     [HttpGet]
@@ -51,8 +54,9 @@ public class StudentController : Controller
     
     [AllowAnonymous]
     [HttpGet("search")] // Query String /api/student?page=1&pageSize=20
-    public IActionResult Search(int page, int pageSize)
+    public async Task<IActionResult> Search(int page, int pageSize)
     {
+        await _rabbitMqPublisher.PublishAsync();
         return Ok(new{page,pageSize});
     }
 

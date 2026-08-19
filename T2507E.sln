@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T2507E_ASP", "T2507E_ASP\T2507E_ASP.csproj", "{0655505C-E04D-4122-B389-4681FECA1590}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Company.FunctionApp1", "Company.FunctionApp1\Company.FunctionApp1.csproj", "{AD848055-185C-4012-A619-C3273BBE27A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{0655505C-E04D-4122-B389-4681FECA1590}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0655505C-E04D-4122-B389-4681FECA1590}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0655505C-E04D-4122-B389-4681FECA1590}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD848055-185C-4012-A619-C3273BBE27A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD848055-185C-4012-A619-C3273BBE27A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD848055-185C-4012-A619-C3273BBE27A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD848055-185C-4012-A619-C3273BBE27A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
